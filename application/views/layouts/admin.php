@@ -6,12 +6,15 @@
   <title>Administrator | <?php echo $title; ?></title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <meta content="<?php echo base_url(); ?>" name="base_url">
   <!-- Bootstrap 3.3.7 -->
   <link rel="stylesheet" href="<?php echo base_url('assets/bower_components/bootstrap/dist/css/bootstrap.min.css'); ?>">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="<?php echo base_url('assets/bower_components/font-awesome/css/font-awesome.min.css'); ?>">
   <!-- Ionicons -->
   <link rel="stylesheet" href="<?php echo base_url('assets/bower_components/Ionicons/css/ionicons.min.css'); ?>">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="<?php echo base_url('assets/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css'); ?>">
   <!-- Theme style -->
   <link rel="stylesheet" href="<?php echo base_url('assets/dist/css/AdminLTE.min.css'); ?>">
   <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -228,8 +231,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li <?php echo ( (isset($submenu) ? $submenu : null) == 'official') ? 'class="active"' : null; ?>><a href="<?php echo base_url('administrator/siswa/resmi'); ?>"><i class="fa fa-circle-o"></i> Resmi</a></li>
-            <li <?php echo ( (isset($submenu) ? $submenu : null) == 'applicant') ? 'class="active"' : null; ?>><a href="index2.html"><i class="fa fa-circle-o"></i> Calon</a></li>
+            <li <?php echo ( $menu == 'student' && (isset($submenu) ? $submenu : null) == 'official') ? 'class="active"' : null; ?>><a href="<?php echo base_url('administrator/siswa/resmi'); ?>"><i class="fa fa-circle-o"></i> Resmi</a></li>
+            <li <?php echo ( $menu == 'student' && (isset($submenu) ? $submenu : null) == 'applicant') ? 'class="active"' : null; ?>><a href="index2.html"><i class="fa fa-circle-o"></i> Calon</a></li>
           </ul>
         </li>
         <li class="treeview">
@@ -323,7 +326,7 @@
             <li><a href="index2.html"><i class="fa fa-circle-o"></i> Bintang Tamu</a></li>
           </ul>
         </li>
-        <li class="treeview">
+        <li class="treeview <?php echo ( $menu == 'cms' ) ? 'active' : null; ?>">
           <a href="#">
             <i class="fa fa-laptop"></i> <span>CMS</span>
             <span class="pull-right-container">
@@ -331,7 +334,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="treeview">
+            <li class="treeview <?php echo ( $menu == 'cms' && isset($submenu['menu']) == 'school' ) ? 'active' : null; ?>">
               <a href="index.html">
                 <i class="fa fa-building-o"></i> Sekolah
                 <span class="pull-right-container">
@@ -339,7 +342,9 @@
                 </span>
               </a>
               <ul class="treeview-menu">
-                <li> <a href="#"><i class="fa fa-circle-o"></i> Tentang</a> </li>
+                <li <?php echo ( $menu == 'cms' && isset($submenu['menu']) == 'school' && isset($submenu['submenu'][0]) == 'about' ) ? 'class="active"' : null; ?>>
+                  <a href="#"><i class="fa fa-circle-o"></i> Tentang</a>
+                </li <?php echo ( $menu == 'cms' && isset($submenu['menu']) == 'school' && isset($submenu['submenu'][1]) == 'class' ) ? 'class="active"' : null; ?>>
                 <li> <a href="#"><i class="fa fa-circle-o"></i> Kelas</a> </li>
               </ul>
             </li>
@@ -357,7 +362,9 @@
             </li>
             <li> <a href="#"><i class="fa fa-circle-o"></i> Motto</a> </li>
             <li> <a href="#"><i class="fa fa-circle-o"></i> Fitur</a> </li>
-            <li> <a href="#"><i class="fa fa-circle-o"></i> Sponsor</a> </li>
+            <li <?php echo ( $menu == 'cms' && isset($submenu) == 'sponsor' ) ? 'class="active"' : null; ?>>
+              <a href="<?php echo base_url('administrator/cms/sponsor') ?>"><i class="fa fa-circle-o"></i> Sponsor</a>
+            </li>
           </ul>
         </li>
         <li class="header">USER NAVIGATION</li>
@@ -399,15 +406,15 @@
       <ol class="breadcrumb">
         <?php
         $i= 0;
-        foreach ($breadcumbs as $bread) {
+        foreach ($breadcumbs as $key => $link) {
           if ($i+1>=2 && $i == count($breadcumbs) - 1) {
             ?>
-            <li class="active text-capitalize"><?php echo $bread; ?></li>
+            <li class="active text-capitalize"><?php echo $breadcumbs[0]; ?></li>
             <?php
           }
           else{
             ?>
-            <li><a href="#" class="text-capitalize"><?php echo $bread; ?></a></li>
+            <li><a href="<?php echo base_url('administrator/'.$link); ?>" class="text-capitalize"><?php echo $key; ?></a></li>
             <?php
           }
           $i++;
@@ -445,6 +452,9 @@
 <script src="<?php echo base_url('assets/bower_components/jquery-ui/jquery-ui.min.js'); ?>"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="<?php echo base_url('assets/bower_components/bootstrap/dist/js/bootstrap.min.js'); ?>"></script>
+<!-- DataTables -->
+<script src="<?php echo base_url('assets/bower_components/datatables.net/js/jquery.dataTables.min.js'); ?>"></script>
+<script src="<?php echo base_url('assets/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js'); ?>"></script>
 <!-- Slimscroll -->
 <script src="<?php echo base_url('assets/bower_components/jquery-slimscroll/jquery.slimscroll.min.js'); ?>"></script>
 <!-- FastClick -->
@@ -467,5 +477,10 @@
     });
   });
 </script>
+
+<?php if (isset($script)): ?>
+  <script type="text/javascript" src="<?php echo base_url('assets/js/page/' . $script . '.js'); ?>"></script>
+<?php endif; ?>
+
 </body>
 </html>
