@@ -8,6 +8,9 @@ class Request extends CI_Model{
     parent::__construct();
     //Codeigniter : Write Less Do More
     $this->guarded = ['submit', '_token'];
+    $this->uploadConf = array(
+      'doc' => [ 'allowed_types' => 'pdf|docx' ]
+    );
   }
 
   function all()
@@ -21,10 +24,15 @@ class Request extends CI_Model{
     return $request;
   }
 
-  public function upload($file_input, $config)
+  public function upload_type($type)
   {
+    return $this->uploadConf[$type];
+  }
+  public function upload($data)
+  {
+    $config = array_merge($this->uploadConf[$data['type']], ['upload_path' => './upload/' . $data['path']]);
     $this->load->library('upload', $config);
-    $uploading = $this->upload->do_upload($file_input) ? true : false;
+    $uploading = $this->upload->do_upload($data['file_input']) ? true : false;
     if (!$uploading) {
       return array(
         'message' => 'error',

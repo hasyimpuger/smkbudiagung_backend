@@ -68,3 +68,10 @@ $route['administrator/cms/sponsor/data'] = 'CMSController/sponsor_data';
 $route['administrator/cms/sponsor/delete'] = 'CMSController/sponsor_delete';
 $route['administrator/cms/sponsor/edit/(:num)'] = 'CMSController/sponsor_edit/$1';
 $route['administrator/cms/sponsor/update/(:num)'] = 'CMSController/sponsor_update/$1';
+
+// teacher
+$route['guru'] = 'TeacherController';
+$route['guru/upload/(:any)'] = 'TeacherController/upload_index/$1';
+$route['guru/upload/(:any)/tambah'] = 'TeacherController/upload_create/$1';
+$route['guru/upload/(:any)/store'] = 'TeacherController/upload_store/$1';
+$route['guru/upload/(:any)/data'] = 'TeacherController/upload_data/$1';
