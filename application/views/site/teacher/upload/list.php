@@ -1,4 +1,5 @@
 <div class="col-md-12">
+  <div id="upload-category" data-category="<?php echo $category; ?>"></div>
   <div class="box box-primary">
     <div class="box-header with-border">
       <h3 class="box-title">List</h3>
@@ -21,6 +22,6 @@
           </tr>
         </tfoot>
       </table>
-    </div> 
+    </div>
   </div>
 </div>

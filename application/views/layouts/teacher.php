@@ -294,7 +294,7 @@
         <?php
         $i= 0;
         foreach ($breadcumbs as $key => $link) {
-          if ($i+1>=2 || $i == count($breadcumbs) - 1) {
+          if ($i+1>=2 && $i == count($breadcumbs) - 1) {
             ?>
             <li class="active text-capitalize"><?php echo $breadcumbs[0]; ?></li>
             <?php

@@ -1,5 +1,6 @@
 var table;
 var baseUrl = $('meta[name="base_url"]').attr('content');
+var category = $('#upload-category').data('category');
 $(document).ready(function() {
 
     //datatables
@@ -10,16 +11,21 @@ $(document).ready(function() {
       "order": [],
 
       "ajax": {
-        "url": baseUrl + '/guru/upload/silabus/data',
+        "url": baseUrl + '/guru/upload/'+category+'/data',
         "type": "POST"
       },
 
-
       "columnDefs": [
         {
+          "sClass": "text-center",
           "targets": [ 0 ],
-          "orderable": false,
+          "orderable": false
         },
+        {
+          "sClass": "text-center",
+          "targets": [ 2 ],
+          "orderable": false
+        }
       ],
 
     });

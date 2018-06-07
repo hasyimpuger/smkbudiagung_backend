@@ -75,3 +75,6 @@ $route['guru/upload/(:any)'] = 'TeacherController/upload_index/$1';
 $route['guru/upload/(:any)/tambah'] = 'TeacherController/upload_create/$1';
 $route['guru/upload/(:any)/store'] = 'TeacherController/upload_store/$1';
 $route['guru/upload/(:any)/data'] = 'TeacherController/upload_data/$1';
+$route['guru/upload/(:any)/detail/(:num)'] = 'TeacherController/upload_detail/$1/$2';
+$route['guru/upload/(:any)/edit/(:num)'] = 'TeacherController/upload_edit/$1/$2';
+$route['guru/mengajar'] = 'TeacherController/teech_index';

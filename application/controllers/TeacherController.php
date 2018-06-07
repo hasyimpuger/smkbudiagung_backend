@@ -16,6 +16,7 @@ class TeacherController extends CI_Controller{
         'menu' => 'upload',
         'submenu' => ['silabus', 'rpp', 'modul']
       ),
+      'teach',
       'score'
     ];
   }
@@ -83,7 +84,7 @@ class TeacherController extends CI_Controller{
     );
     // data for view
     $data = array(
-
+      'category' => $category
     );
     // initialize
     $init = array(
@@ -114,8 +115,7 @@ class TeacherController extends CI_Controller{
       $row = array();
       $row[] = $no;
       $row[] = $field->teacher_file_title;
-      $row[] = '<button type="button" class="btn btn-danger btn-sm btn-flat" id="hapus" data-id="'. $field->teacher_file_id .'"><i class="fa fa-trash"></i></button>';
-
+      $row[] = $this->Html->btn_delete($field->teacher_file_id) . ' ' . $this->Html->link_edit('guru/upload/'.$category.'/edit'.'/'. $field->teacher_file_id) . ' ' . $this->Html->btn_tool('download', $field->teacher_file_id);
       $data[] = $row;
     }
 
@@ -133,7 +133,7 @@ class TeacherController extends CI_Controller{
     // breadcumbs
     $breadcumbs = array(
       'dashboard' => '',
-      'upload' => 'upload/',
+      'upload' => 'upload/' . $category . '/',
       // active
       'tambah'
     );
@@ -188,6 +188,139 @@ class TeacherController extends CI_Controller{
     else {
       redirect('404');
     }
+  }
+
+  public function upload_detail($category, $id)
+  {
+    // breadcumbs
+    $breadcumbs = array(
+      'dashboard' => '',
+      'upload' => 'upload/' . $category . '/',
+      // active
+      'detail'
+    );
+    // data for view
+    $data = array(
+      'category' => $category,
+      'teacher_file' => $this->db->get_where('teacher_files', ['teacher_file_id' => $id])->row()
+    );
+    // initialize
+    $init = array(
+      'breadcumbs' => $breadcumbs,
+      'menu'       => $this->upload_init($category)['menu'],
+      'submenu'    => $this->upload_init($category)['submenu'],
+      'content'    => 'upload/detail',
+      'title'      => $this->upload_init($category)['title'],
+      'sub_title'  => "Detail " . $category,
+      'data'       => $data
+    );
+    // load view
+    $this->load->view('layouts/teacher', $init);
+  }
+
+  public function upload_edit($category, $id)
+  {
+    // breadcumbs
+    $breadcumbs = array(
+      'dashboard' => '',
+      'upload' => 'upload/' . $category . '/',
+      // active
+      'edit'
+    );
+    // data for view
+    $data = array(
+      'category' => $category,
+      'teacher_file' => $this->db->get_where('teacher_files', ['teacher_file_id' => $id])->row()
+    );
+    // initialize
+    $init = array(
+      'breadcumbs' => $breadcumbs,
+      'menu'       => $this->upload_init($category)['menu'],
+      'submenu'    => $this->upload_init($category)['submenu'],
+      'content'    => 'upload/edit',
+      'title'      => $this->upload_init($category)['title'],
+      'sub_title'  => "Edit " . $category,
+      'data'       => $data
+    );
+    // load view
+    $this->load->view('layouts/teacher', $init);
+  }
+
+  public function upload_update($category, $id)
+  {
+    if ($this->input->post()) {
+      // data then
+      $then = $this->db->get_where($this->upload_init()['table'], ['teacher_file_id' => $id])->row();
+      // upload
+      $upload = $this->Request->upload([
+        'type' => 'doc',
+        'file_input' => 'teacher_file_name',
+        'path' => 'doc/teacher/'
+      ]);
+      // insert
+      if ($upload['message'] == 'success') {
+        // data merge
+        $dataMerge['teacher_file_teacher_id'] = $this->session->userdata('user_data')->teacher_id;
+        $dataMerge['teacher_file_type'] = $category;
+        $dataMerge['teacher_file_name'] = $upload['data']['file_name'];
+        $dataMerge['teacher_file_ext']  = $upload['data']['file_ext'];
+        $dataMerge['teacher_file_size'] = $upload['data']['file_size'];
+      }
+      // not insert
+      else {
+        echo "hahal";
+      }
+      // params for insert
+      $params = array_merge($this->Request->all(), $dataMerge);
+      // do
+      $insert = $this->db->insert($this->upload_init($category)['table'], $params);
+      // redirect after insert
+      $redirect = ( $this->input->post('submit') == 'silent' ) ? '/tambah' : '/';
+      redirect('guru/upload/' . $category .$redirect);
+    }
+    else {
+      redirect('404');
+    }
+  }
+
+  public function teech_init()
+  {
+    return array(
+      'table'   => 'teacher_files',
+      'menu'    => $this->menu[2],
+      'title'   => 'Mengajar',
+      'tables'  => [
+        'table'    => 'teech',
+        'fillable' => [null, 'teacher_file_title', null],
+        'searchable' => ['teacher_file_title'],
+        'orderable' => array('teacher_file_id', 'asc')
+      ]
+    );
+  }
+  public function teech_index()
+  {
+    // breadcumbs
+    $breadcumbs = array(
+      'dashboard' => '',
+      // active
+      'mengajar'
+    );
+    // data for view
+    $data = array(
+
+    );
+    // initialize
+    $init = array(
+      'breadcumbs' => $breadcumbs,
+      'menu'       => $this->teech_init()['menu'],
+      'content'    => 'teech/list',
+      'title'      => $this->teech_init()['title'],
+      'sub_title'  => 'List',
+      'data'       => $data,
+      'script'     => 'teacher'
+    );
+    // load view
+    $this->load->view('layouts/teacher', $init);
   }
 
 }
