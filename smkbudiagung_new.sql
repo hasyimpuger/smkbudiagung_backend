@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 05, 2018 at 12:14 PM
+-- Generation Time: Jun 07, 2018 at 11:09 AM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -45,6 +45,7 @@ CREATE TABLE `categories` (
 CREATE TABLE `classes` (
   `class_id` int(11) NOT NULL,
   `class_name` varchar(100) NOT NULL,
+  `class_program_study_id` int(11) NOT NULL,
   `class_created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `class_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `class_deleted_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
@@ -342,6 +343,22 @@ CREATE TABLE `sponsors` (
   `sponsor_deleted_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `sponsors`
+--
+
+INSERT INTO `sponsors` (`sponsor_id`, `sponsor_name`, `sponsor_logo`, `sponsor_created_at`, `sponsor_updated_at`, `sponsor_deleted_at`) VALUES
+(6, 'testing', 'alyazenita_.png', '2018-06-06 09:37:27', '0000-00-00 00:00:00', '2018-06-06 03:37:27'),
+(8, 'huhuhaha', 'default.png', '2018-06-06 09:37:47', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(9, 'sdfsdf', 'default.png', '2018-06-06 09:37:20', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(10, 'asdsda', 'default.png', '2018-06-06 09:37:20', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(11, 'vcxcvcxv', 'default.png', '2018-06-06 09:37:20', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(12, 'sadw', 'default.png', '2018-06-06 09:36:12', '0000-00-00 00:00:00', '2018-06-06 03:36:12'),
+(13, 'sdfsdf', 'default.png', '2018-06-06 09:36:12', '0000-00-00 00:00:00', '2018-06-06 03:36:12'),
+(14, 'zxczccxz', 'default.png', '2018-06-06 09:36:12', '0000-00-00 00:00:00', '2018-06-06 03:36:12'),
+(15, 'wette', 'default.png', '2018-06-06 09:36:12', '0000-00-00 00:00:00', '2018-06-06 03:36:12'),
+(16, 'gfgn', 'default.png', '2018-06-06 09:36:12', '0000-00-00 00:00:00', '2018-06-06 03:36:12');
+
 -- --------------------------------------------------------
 
 --
@@ -511,6 +528,44 @@ CREATE TABLE `teachers` (
   `teacher_deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `teachers`
+--
+
+INSERT INTO `teachers` (`teacher_id`, `teacher_user_id`, `teacher_name`, `teacher_nuptk`, `teacher_gender`, `teacher_born_in`, `teacher_born_date`, `teacher_nip`, `teacher_job_status`, `teacher_type_ptk`, `teacher_religion`, `teacher_street_address`, `teacher_rt`, `teacher_rw`, `teacher_hutment`, `teacher_village`, `teacher_districts`, `teacher_postal_code`, `teacher_home_phone`, `teacher_hand_phone`, `teacher_email`, `teacher_additional_task`, `teacher_sk_cpns`, `teacher_date_cpns`, `teacher_sk_appointment`, `teacher_tmt_appointment`, `teacher_agency_appointment`, `teacher_rank_group`, `teacher_salary_source`, `teacher_mom`, `teacher_marriage_status`, `teacher_wife`, `teacher_wife_nip`, `teacher_wife_job`, `teacher_tmt_pns`, `teacher_after_licence_headmaster`, `teacher_ever_training_supervisor`, `teacher_skill_braille`, `teacher_skill_sign_language`, `teacher_npwp`, `teacher_name_taxpayer`, `teacher_citizenship`, `teacher_bank`, `teacher_no_rek`, `teacher_rek_name`, `teacher_nik`, `teacher_title_id`, `teacher_greeting`, `teacher_level`, `teacher_status`, `teacher_facebook`, `teacher_twitter`, `teacher_instagram`, `teacher_leave_at`, `teacher_created_at`, `teacher_updated_at`, `teacher_deleted_at`) VALUES
+(1, 2, 'Abdul Majid', '', 'M', 'Subang', '1986-02-02', '', '', '', 'islam', 'Jalancagak', '12', '05', 'Sukaasih', 'Sukamulya', 'Jalan Cagak', '19765', '089712712123', '089712712123', 'huhu@gmail.com', '', '', '0000-00-00', '', '0000-00-00', '', '', '', 'aminah', '1', 'sukinem', '', '', '0000-00-00', 0, 0, 0, 0, '', '', '', '', '', '', '', 0, 'hai, nama saya adul', 'common', 'active', '', '', '', NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `teacher_files`
+--
+
+CREATE TABLE `teacher_files` (
+  `teacher_file_id` int(11) NOT NULL,
+  `teacher_file_teacher_id` int(11) NOT NULL,
+  `teacher_file_type` enum('silabus','rpp','modul') NOT NULL,
+  `teacher_file_title` varchar(100) NOT NULL,
+  `teacher_file_name` varchar(100) NOT NULL,
+  `teacher_file_ext` char(5) NOT NULL,
+  `teacher_file_size` int(11) NOT NULL,
+  `teacher_file_created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `teacher_file_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `teacher_file_deleted_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `teacher_files`
+--
+
+INSERT INTO `teacher_files` (`teacher_file_id`, `teacher_file_teacher_id`, `teacher_file_type`, `teacher_file_title`, `teacher_file_name`, `teacher_file_ext`, `teacher_file_size`, `teacher_file_created_at`, `teacher_file_updated_at`, `teacher_file_deleted_at`) VALUES
+(1, 1, 'silabus', 'huha', '11401054_WDC2016_Mesakke_Subang3.pdf', '.pdf', 1873, '2018-06-06 22:27:30', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(2, 1, 'silabus', 'Matematika', 'ANGGARAN_DASAR.docx', '.docx', 32, '2018-06-06 22:26:32', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(3, 1, 'silabus', 'huha', '11401054_WDC2016_Mesakke_Subang4.pdf', '.pdf', 1873, '2018-06-06 22:28:54', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(4, 1, 'modul', 'modul 1', '11401054_WDC2016_Mesakke_Subang5.pdf', '.pdf', 1873, '2018-06-06 22:30:04', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(5, 1, 'modul', 'Matematika', 'Asal_Mula_VOC.docx', '.docx', 43, '2018-06-06 22:35:13', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(6, 1, 'modul', 'asd', 'ahmadirfan.pdf', '.pdf', 1776, '2018-06-06 22:35:28', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+
 -- --------------------------------------------------------
 
 --
@@ -521,7 +576,7 @@ CREATE TABLE `teachs` (
   `teach_id` int(11) NOT NULL,
   `teach_teacher_id` int(11) NOT NULL,
   `teach_study_id` int(11) NOT NULL,
-  `teach_program_study_id` int(11) NOT NULL,
+  `teach_class_id` int(11) NOT NULL,
   `teach_created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `teach_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `teach_deleted_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
@@ -552,7 +607,7 @@ CREATE TABLE `users` (
   `user_id` int(11) NOT NULL,
   `user_username` varchar(100) NOT NULL,
   `user_password` varchar(100) NOT NULL,
-  `user_role` enum('admin','student','applicant') NOT NULL,
+  `user_role` enum('admin','student','teacher') NOT NULL,
   `user_created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `user_updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `user_deleted_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
@@ -563,7 +618,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `user_username`, `user_password`, `user_role`, `user_created_at`, `user_updated_at`, `user_deleted_at`) VALUES
-(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', '2018-06-03 16:26:54', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 'admin', '2018-06-03 16:26:54', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(2, 'teacher', '8d788385431273d11e8b43bb78f3aa41', 'teacher', '2018-06-06 13:19:26', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -730,6 +786,12 @@ ALTER TABLE `teachers`
   ADD PRIMARY KEY (`teacher_id`);
 
 --
+-- Indexes for table `teacher_files`
+--
+ALTER TABLE `teacher_files`
+  ADD PRIMARY KEY (`teacher_file_id`);
+
+--
 -- Indexes for table `teachs`
 --
 ALTER TABLE `teachs`
@@ -851,7 +913,7 @@ ALTER TABLE `school`
 -- AUTO_INCREMENT for table `sponsors`
 --
 ALTER TABLE `sponsors`
-  MODIFY `sponsor_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `sponsor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT for table `students`
 --
@@ -876,7 +938,12 @@ ALTER TABLE `studies`
 -- AUTO_INCREMENT for table `teachers`
 --
 ALTER TABLE `teachers`
-  MODIFY `teacher_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `teacher_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `teacher_files`
+--
+ALTER TABLE `teacher_files`
+  MODIFY `teacher_file_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `teachs`
 --
@@ -891,7 +958,7 @@ ALTER TABLE `titles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `videos`
 --

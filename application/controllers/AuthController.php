@@ -54,7 +54,7 @@ class AuthController extends CI_Controller{
 
   public function making_access($query)
   {
-    $user_data = $this->db->get_where($query->row()->user_role . 's', [$query->row()->user_role.'_user_id' => $query->row()->user_id])->row();
+    $user_data = $this->db->get_where( ($query->row()->user_role == 'admin') ? 'users' : $query->row()->user_role . 's', [($query->row()->user_role == 'admin') ? 'user_id' : $query->row()->user_role.'_user_id' => $query->row()->user_id])->row();
     $data_making = array(
       'user_id'   => $query->row()->user_id,
       'user_role' => $query->row()->user_role,
