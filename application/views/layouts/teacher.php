@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Guru | <?php echo $title; ?></title>
+  <title>Guru | <?php echo $title . ( isset($sub_title) ? '- '.$sub_title : null  ); ?></title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <meta content="<?php echo base_url(); ?>" name="base_url">
@@ -29,8 +29,16 @@
   <![endif]-->
 
   <!-- Google Font -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,400i,600,700|Roboto+Slab" rel="stylesheet">
+
   <style media="screen">
+    *, .font-heading{
+      font-family: "Fira Sans", sans-serif;
+    }
+    h1,h2,h3,h4,h5,h6, .font-heading{
+      font-family: "Roboto Slab";
+    }
     #loader{
       position: fixed;
       top: 0;
@@ -253,6 +261,16 @@
             <i class="fa fa-laptop"></i> <span>Mengajar</span>
           </a>
         </li>
+        <li <?php echo ($menu == 'schedule') ? 'class="active"' : null; ?>>
+          <a href="<?php echo base_url('guru/jadwal'); ?>">
+            <i class="fa fa-calendar"></i> <span>Jadwal</span>
+          </a>
+        </li>
+        <li <?php echo ($menu == 'score') ? 'class="active"' : null; ?>>
+          <a href="<?php echo base_url('guru/nilai-siswa'); ?>">
+            <i class="fa fa-users"></i> <span>Nilai Siswa</span>
+          </a>
+        </li>
 
         <li class="header">USER NAVIGATION</li>
         <li class="treeview">
@@ -300,9 +318,16 @@
             <?php
           }
           else{
-            ?>
-            <li><a href="<?php echo base_url('guru/'.$link); ?>" class="text-capitalize"><?php echo $key; ?></a></li>
-            <?php
+            if (count($breadcumbs) == 1) {
+              ?>
+              <li class="active text-capitalize"><?php echo $breadcumbs[0]; ?></li>
+              <?php
+            }
+            else{
+              ?>
+              <li><a href="<?php echo base_url('guru/'.$link); ?>" class="text-capitalize"><?php echo $key; ?></a></li>
+              <?php
+            }
           }
           $i++;
         }

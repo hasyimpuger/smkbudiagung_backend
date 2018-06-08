@@ -326,6 +326,20 @@
             <li><a href="index2.html"><i class="fa fa-circle-o"></i> Bintang Tamu</a></li>
           </ul>
         </li>
+        <li class="treeview <?php echo ( $menu == 'school' ) ? 'active' : null; ?>">
+          <a href="index.html">
+            <i class="fa fa-building-o"></i> Sekolah
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li <?php echo ( $menu == 'school' && isset($submenu['menu']) == 'about' ) ? 'class="active"' : null; ?>>
+              <a href="#"><i class="fa fa-circle-o"></i> Tentang</a>
+            </li <?php echo ( $menu == 'school' && isset($submenu['menu']) == 'class' ) ? 'class="active"' : null; ?>>
+            <li> <a href="#"><i class="fa fa-circle-o"></i> Kelas</a> </li>
+          </ul>
+        </li>
         <li class="treeview <?php echo ( $menu == 'cms' ) ? 'active' : null; ?>">
           <a href="#">
             <i class="fa fa-laptop"></i> <span>CMS</span>
@@ -334,20 +348,6 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="treeview <?php echo ( $menu == 'cms' && isset($submenu['menu']) == 'school' ) ? 'active' : null; ?>">
-              <a href="index.html">
-                <i class="fa fa-building-o"></i> Sekolah
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
-                </span>
-              </a>
-              <ul class="treeview-menu">
-                <li <?php echo ( $menu == 'cms' && isset($submenu['menu']) == 'school' && isset($submenu['submenu'][0]) == 'about' ) ? 'class="active"' : null; ?>>
-                  <a href="#"><i class="fa fa-circle-o"></i> Tentang</a>
-                </li <?php echo ( $menu == 'cms' && isset($submenu['menu']) == 'school' && isset($submenu['submenu'][1]) == 'class' ) ? 'class="active"' : null; ?>>
-                <li> <a href="#"><i class="fa fa-circle-o"></i> Kelas</a> </li>
-              </ul>
-            </li>
             <li class="treeview">
               <a href="index.html">
                 <i class="fa fa-quote-left"></i> Quote

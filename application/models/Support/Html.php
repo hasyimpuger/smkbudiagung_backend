@@ -50,4 +50,9 @@ class Html extends CI_Model{
     return form_button($button);
   }
 
+  public function link($url)
+  {
+    return '<a href="'.base_url($url).'" class="text-success">Lihat</a>';
+  }
+
 }

@@ -18,8 +18,13 @@ class Tables extends CI_Model{
 
     $this->db->from($table);
     $this->db->where($field_default . '_deleted_at', '0000-00-00 00:00:00');
+    if (isset($data['join'])) {
+      foreach ($data['join'] as $key => $value) {
+        $this->db->join($key, $value);
+      }
+    }
     if (isset($data['where'])) {
-      foreach ($data['where'] as $key => $value) { 
+      foreach ($data['where'] as $key => $value) {
         $this->db->where($key, $value);
       }
     }

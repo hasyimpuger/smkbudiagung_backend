@@ -17,6 +17,7 @@ class TeacherController extends CI_Controller{
         'submenu' => ['silabus', 'rpp', 'modul']
       ),
       'teach',
+      'schedule',
       'score'
     ];
   }
@@ -283,21 +284,21 @@ class TeacherController extends CI_Controller{
     }
   }
 
-  public function teech_init()
+  public function teach_init()
   {
     return array(
-      'table'   => 'teacher_files',
+      'table'   => 'teachs',
       'menu'    => $this->menu[2],
       'title'   => 'Mengajar',
       'tables'  => [
-        'table'    => 'teech',
-        'fillable' => [null, 'teacher_file_title', null],
-        'searchable' => ['teacher_file_title'],
-        'orderable' => array('teacher_file_id', 'asc')
+        'table'    => 'teachs',
+        'fillable' => [null, 'study_name', 'class_name', 'program_study_abbr', null],
+        'searchable' => ['study_name', 'class_name', 'program_study_abbr'],
+        'orderable' => array('teach_id', 'desc')
       ]
     );
   }
-  public function teech_index()
+  public function teach_index()
   {
     // breadcumbs
     $breadcumbs = array(
@@ -312,10 +313,183 @@ class TeacherController extends CI_Controller{
     // initialize
     $init = array(
       'breadcumbs' => $breadcumbs,
-      'menu'       => $this->teech_init()['menu'],
-      'content'    => 'teech/list',
-      'title'      => $this->teech_init()['title'],
+      'menu'       => $this->teach_init()['menu'],
+      'content'    => 'teach/list',
+      'title'      => $this->teach_init()['title'],
       'sub_title'  => 'List',
+      'data'       => $data,
+      'script'     => 'teacher'
+    );
+    // load view
+    $this->load->view('layouts/teacher', $init);
+  }
+
+  public function teach_data()
+  {
+    $join = array(
+      'studies' => 'studies.study_id = teachs.teach_study_id',
+      'classes' => 'classes.class_id = teachs.teach_class_id',
+      'program_studies' => 'program_studies.program_study_id = classes.class_program_study_id'
+    );
+    $tables = $this->Tables->get(array_merge($this->teach_init()['tables'], ['join' => $join]));
+    $list = $tables['query'];
+    $data = array();
+    $no = $_POST['start'];
+
+    foreach ($list as $field) {
+      $no++;
+      $row = array();
+      $row[] = $no;
+      $row[] = $field->class_name;
+      $row[] = $field->program_study_abbr;
+      $row[] = $field->study_name;
+      $row[] = $this->Html->btn_delete($field->teach_id) . ' ' . $this->Html->link_edit('guru/mengajar/edit'.'/'. $field->teach_id) . ' ' . $this->Html->btn_tool('download', $field->teach_id);
+      $data[] = $row;
+    }
+
+    $result = array(
+      'draw' => $_POST['draw'],
+      'recordsTotal' => $tables['count_all'],
+      'recordsFiltered' => $tables['count_filtered'],
+      'data' => $data
+    );
+
+    echo json_encode($result);
+  }
+
+  public function teach_create()
+  {
+    // breadcumbs
+    $breadcumbs = array(
+      'dashboard' => '',
+      'mengajar' => 'mengajar',
+      // active
+      'tambah'
+    );
+    // data for view
+    $data = array(
+      'classes' => $this->db->get('classes'),
+      'studies' => $this->db->get('studies')
+    );
+    // initialize
+    $init = array(
+      'breadcumbs' => $breadcumbs,
+      'menu'       => $this->teach_init()['menu'],
+      'content'    => 'teach/create',
+      'title'      => $this->teach_init()['title'],
+      'sub_title'  => 'Tambah',
+      'data'       => $data
+    );
+    // load view
+    $this->load->view('layouts/teacher', $init);
+  }
+  public function teach_store()
+  {
+    if ($this->input->post()) {
+      $dataMerge = array(
+        'teach_teacher_id' => $this->session->userdata('user_data')->teacher_id
+      );
+      // params for insert
+      $params = array_merge($this->Request->all(), $dataMerge);
+      // do
+      $insert = $this->db->insert($this->teach_init()['table'], $params);
+      // redirect after insert
+      $redirect = ( $this->input->post('submit') == 'silent' ) ? '/tambah' : '/';
+      redirect('guru/mengajar');
+    }
+  }
+
+  public function score_student_init()
+  {
+    return array(
+      'table'   => ['score_types', 'scores', 'teachs', 'students'],
+      'menu'    => $this->menu[4],
+      'title'   => 'Nilai Siswa',
+      'tables'  => array(
+        'teach' => array(
+          'table'    => 'teachs',
+          'fillable' => [null, 'study_name', 'class_name', null],
+          'searchable' => ['study_name', 'class_name'],
+          'orderable' => array('teach_id', 'desc')
+        )
+      )
+    );
+  }
+  public function score_student_index()
+  {
+    // breadcumbs
+    $breadcumbs = array(
+      'dashboard' => '',
+      // active
+      'kelas ajar'
+    );
+    // data for view
+    $data = array(
+
+    );
+    // initialize
+    $init = array(
+      'breadcumbs' => $breadcumbs,
+      'menu'       => $this->score_student_init()['menu'],
+      'content'    => 'score_student/class_list',
+      'title'      => $this->score_student_init()['title'],
+      'sub_title'  => 'Kelas Ajar',
+      'data'       => $data,
+      'script'     => 'teacher'
+    );
+    // load view
+    $this->load->view('layouts/teacher', $init);
+  }
+
+  public function score_student_class_teach_data()
+  {
+    $join = array(
+      'classes' => 'classes.class_id = teachs.teach_class_id'
+    );
+    $tables = $this->Tables->get(array_merge($this->score_student_init()['tables']['teach'], ['join' => $join]));
+    $list = $tables['query'];
+    $data = array();
+    $no = $_POST['start'];
+
+    foreach ($list as $field) {
+      $no++;
+      $row = array();
+      $row[] = $no;
+      $row[] = $field->class_name;
+      $row[] = $this->Html->link('guru/nilai-siswa/kelas'.'/'. $field->class_id);
+      $data[] = $row;
+    }
+
+    $result = array(
+      'draw' => $_POST['draw'],
+      'recordsTotal' => $tables['count_all'],
+      'recordsFiltered' => $tables['count_filtered'],
+      'data' => $data
+    );
+
+    echo json_encode($result);
+  }
+
+  public function score_student_class($class_id)
+  {
+    // breadcumbs
+    $breadcumbs = array(
+      'dashboard' => '',
+      'kelas ajar' => 'nilai-siswa',
+      // active
+      'kategori nilai'
+    );
+    // data for view
+    $data = array(
+
+    );
+    // initialize
+    $init = array(
+      'breadcumbs' => $breadcumbs,
+      'menu'       => $this->score_student_init()['menu'],
+      'content'    => 'score_student/category_score_list',
+      'title'      => $this->score_student_init()['title'],
+      'sub_title'  => 'Kategori Nilai',
       'data'       => $data,
       'script'     => 'teacher'
     );

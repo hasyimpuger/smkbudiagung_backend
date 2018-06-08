@@ -59,4 +59,65 @@ $(document).ready(function() {
       window.location = baseUrl + 'administrator/cms/sponsor/edit/' + id;
     });
 
+    tableTeach = $('#table-teach').DataTable({
+
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+
+      "ajax": {
+        "url": baseUrl + '/guru/mengajar/data',
+        "type": "POST"
+      },
+
+      "columnDefs": [
+        {
+          "sClass": "text-center",
+          "targets": [ 0 ],
+          "orderable": false
+        },
+        {
+          "sClass": "text-center",
+          "targets": [ 1 ]
+        },
+        {
+          "sClass": "text-center",
+          "targets": [ 2 ]
+        },
+        {
+          "sClass": "text-center",
+          "targets": [ 4 ],
+          "orderable": false
+        }
+      ],
+
+    });
+
+    tableClassTeach = $('#table-class-teach').DataTable({
+
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+
+      "ajax": {
+        "url": baseUrl + '/guru/nilai-siswa/class-teach/data',
+        "type": "POST"
+      },
+
+      "columnDefs": [
+        {
+          "sClass": "text-center",
+          "targets": [ 0 ],
+          "orderable": false
+        },
+        {
+          "sClass": "text-center",
+          "targets": [ 2 ],
+          "orderable": false
+        }
+      ],
+
+    });
+
+
 });
